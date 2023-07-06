@@ -1,0 +1,25 @@
+apiVersion: loggie.io/v1beta1
+kind: LogConfig
+metadata:
+  name: genfiles
+  namespace: default
+spec:
+  pipeline:
+    sources: |
+      - type: file
+        name: demo
+        paths:
+        - /tmp/log/*.log
+
+    sink: |
+      type: elasticsearch
+      hosts: [ "vlsingle-victoria-logs-single-server.victoria-logs.svc:9428/insert/elasticsearch/" ]
+      parameters:
+        _msg_field: "body"
+        _time_field: "@timestamp"
+        _stream_fields: "logconfig,namespace,podname,containername"
+  
+  selector:
+    labelSelector:
+      app: genfiles
+    type: pod

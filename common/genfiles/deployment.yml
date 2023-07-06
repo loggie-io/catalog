@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: genfiles
+  name: genfiles
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: genfiles
+  template:
+    metadata:
+      labels:
+        app: genfiles
+    spec:
+      volumes:
+      - emptyDir: {}
+        name: logs
+      containers:
+      - name: genfiles
+        image: loggieio/loggie:main-8f8c975
+        command: ["sleep", "36000"]
+        volumeMounts:
+        - mountPath: /tmp/log
+          name: logs
